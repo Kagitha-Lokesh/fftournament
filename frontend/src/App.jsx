@@ -24,8 +24,10 @@ import {
 import './styles.css'
 import './player.css'
 import './organizer.css'
+import './admin.css'
 import PlayerShell from './components/player/layout/PlayerShell'
 import OrganizerShell from './components/organizer/layout/OrganizerShell'
+import AdminShell from './components/admin/layout/AdminShell'
 import {
   HERO_CONTENT,
   NAV_LINKS,
@@ -748,7 +750,7 @@ function LeaderboardSection() {
 }
 
 // ─── Roles Section ────────────────────────────────────────────────────────────
-function RolesSection({ onNavigateToPlayer, onNavigateToOrganizer }) {
+function RolesSection({ onNavigateToPlayer, onNavigateToOrganizer, onNavigateToAdmin }) {
   const [ref, visible] = useReveal()
 
   return (
@@ -798,6 +800,24 @@ function RolesSection({ onNavigateToPlayer, onNavigateToOrganizer }) {
                 <button
                   type="button"
                   onClick={onNavigateToOrganizer}
+                  className="role-card__cta"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: 0,
+                    font: 'inherit',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                  }}
+                >
+                  {role.cta} <span aria-hidden="true">→</span>
+                </button>
+              ) : role.id === 'admin' ? (
+                <button
+                  type="button"
+                  onClick={onNavigateToAdmin}
                   className="role-card__cta"
                   style={{
                     background: 'none',
@@ -1097,6 +1117,16 @@ export default function App() {
     )
   }
 
+  // Render dedicated Admin Dashboard when on /admin or sub-routes
+  if (routePath.startsWith('/admin')) {
+    return (
+      <AdminShell
+        currentPath={routePath}
+        onSignOut={() => navigateTo('/')}
+      />
+    )
+  }
+
   return (
     <>
       <Nav onNavigateToPlayer={() => navigateTo('/player')} />
@@ -1111,6 +1141,7 @@ export default function App() {
         <RolesSection
           onNavigateToPlayer={() => navigateTo('/player')}
           onNavigateToOrganizer={() => navigateTo('/organizer')}
+          onNavigateToAdmin={() => navigateTo('/admin')}
         />
         <OrganizerSection onNavigateToOrganizer={() => navigateTo('/organizer')} />
         <ResultsSection />
