@@ -23,7 +23,9 @@ import {
 } from 'react-icons/io5'
 import './styles.css'
 import './player.css'
+import './organizer.css'
 import PlayerShell from './components/player/layout/PlayerShell'
+import OrganizerShell from './components/organizer/layout/OrganizerShell'
 import {
   HERO_CONTENT,
   NAV_LINKS,
@@ -746,7 +748,7 @@ function LeaderboardSection() {
 }
 
 // ─── Roles Section ────────────────────────────────────────────────────────────
-function RolesSection({ onNavigateToPlayer }) {
+function RolesSection({ onNavigateToPlayer, onNavigateToOrganizer }) {
   const [ref, visible] = useReveal()
 
   return (
@@ -792,6 +794,24 @@ function RolesSection({ onNavigateToPlayer }) {
                 >
                   {role.cta} <span aria-hidden="true">→</span>
                 </button>
+              ) : role.id === 'organizer' ? (
+                <button
+                  type="button"
+                  onClick={onNavigateToOrganizer}
+                  className="role-card__cta"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: 0,
+                    font: 'inherit',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                  }}
+                >
+                  {role.cta} <span aria-hidden="true">→</span>
+                </button>
               ) : (
                 <a href="#" className="role-card__cta">
                   {role.cta} <span aria-hidden="true">→</span>
@@ -806,7 +826,7 @@ function RolesSection({ onNavigateToPlayer }) {
 }
 
 // ─── Organizer Section ────────────────────────────────────────────────────────
-function OrganizerSection() {
+function OrganizerSection({ onNavigateToOrganizer }) {
   const [ref, visible] = useReveal()
   const { stats, tournaments, flow } = ORGANIZER_DASHBOARD
 
@@ -840,7 +860,14 @@ function OrganizerSection() {
               ))}
             </div>
 
-            <a href="#" className="btn btn--primary" style={{ marginTop: 32 }}>Create a Tournament</a>
+            <button
+              type="button"
+              onClick={onNavigateToOrganizer}
+              className="btn btn--primary"
+              style={{ marginTop: 32 }}
+            >
+              Create a Tournament
+            </button>
           </div>
 
           {/* UI mockup */}
@@ -953,7 +980,7 @@ function ResultsSection() {
 }
 
 // ─── Final CTA ────────────────────────────────────────────────────────────────
-function CTASection() {
+function CTASection({ onNavigateToOrganizer }) {
   const [ref, visible] = useReveal()
 
   return (
@@ -969,7 +996,13 @@ function CTASection() {
           </p>
           <div className="cta__actions">
             <a href="#tournaments" className="btn btn--primary btn--lg">Explore Tournaments</a>
-            <a href="#" className="btn btn--ghost-dark btn--lg">Create a Tournament</a>
+            <button
+              type="button"
+              onClick={onNavigateToOrganizer}
+              className="btn btn--ghost-dark btn--lg"
+            >
+              Create a Tournament
+            </button>
           </div>
         </div>
       </div>
@@ -1054,6 +1087,16 @@ export default function App() {
     )
   }
 
+  // Render dedicated Organizer Dashboard when on /organizer or sub-routes
+  if (routePath.startsWith('/organizer')) {
+    return (
+      <OrganizerShell
+        currentPath={routePath}
+        onSignOut={() => navigateTo('/')}
+      />
+    )
+  }
+
   return (
     <>
       <Nav onNavigateToPlayer={() => navigateTo('/player')} />
@@ -1065,10 +1108,13 @@ export default function App() {
         <TrustSection />
         <CareerSection />
         <LeaderboardSection />
-        <RolesSection onNavigateToPlayer={() => navigateTo('/player')} />
-        <OrganizerSection />
+        <RolesSection
+          onNavigateToPlayer={() => navigateTo('/player')}
+          onNavigateToOrganizer={() => navigateTo('/organizer')}
+        />
+        <OrganizerSection onNavigateToOrganizer={() => navigateTo('/organizer')} />
         <ResultsSection />
-        <CTASection />
+        <CTASection onNavigateToOrganizer={() => navigateTo('/organizer')} />
       </main>
       <Footer />
     </>
