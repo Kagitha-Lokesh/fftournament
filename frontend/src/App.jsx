@@ -920,7 +920,7 @@ function Footer() {
       <div className="container">
         <div className="footer__upper">
           {/* Brand */}
-          <div>
+          <div className="footer__brand">
             <div className="footer__brand-name">
               <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                 <polygon points="10,2 18,17 2,17" stroke="#F4C400" strokeWidth="1.6" strokeLinejoin="round" fill="rgba(244,196,0,0.12)"/>
@@ -936,19 +936,21 @@ function Footer() {
             </p>
           </div>
 
-          {/* Link columns */}
-          {Object.entries(FOOTER_LINKS).map(([col, links]) => (
-            <div key={col}>
-              <div className="footer__col-title">{col}</div>
-              <ul className="footer__links" role="list">
-                {links.map(l => (
-                  <li key={l.label}>
-                    <a href={l.href} className="footer__link">{l.label}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {/* 3-column navigation grid */}
+          <div className="footer__nav-grid">
+            {Object.entries(FOOTER_LINKS).map(([col, links]) => (
+              <div key={col} className="footer__col">
+                <div className="footer__col-title">{col}</div>
+                <ul className="footer__links" role="list">
+                  {links.map(l => (
+                    <li key={l.label}>
+                      <a href={l.href} className="footer__link">{l.label}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="footer__lower">

@@ -2571,11 +2571,17 @@ ul {
 
 .footer__upper {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  grid-template-columns: 1.5fr 3fr;
   gap: 48px;
   padding-bottom: 48px;
   border-bottom: 1px solid rgba(255, 255, 255, .06);
   margin-bottom: 32px;
+}
+
+.footer__nav-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
 }
 
 .footer__brand-name {
@@ -2749,7 +2755,12 @@ ul {
   }
 
   .footer__upper {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .footer__nav-grid {
+    gap: 32px;
   }
 
   .lifecycle__cards {
@@ -3091,20 +3102,119 @@ ul {
     line-height: 1.5;
   }
 
-  /* Tournaments */
+  /* Tournaments — 2 cards per row on mobile */
+  .tournaments__header {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
   .tournament-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .t-card {
+    border-radius: 12px;
+    border-width: 1px;
   }
 
   .t-card__thumb,
   .card-image {
-    height: 160px;
+    height: clamp(88px, 24vw, 108px);
   }
 
-  .tournaments__header {
+  .t-card__mode-badge {
+    top: 6px;
+    right: 6px;
+    font-size: 8px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  .t-card__body {
+    padding: 10px 10px 12px;
+    gap: 8px;
+  }
+
+  .t-card__verified {
+    font-size: 8px;
+    padding: 2px 5px;
+    gap: 3px;
+    border-radius: 3px;
+  }
+
+  .t-card__verified svg {
+    width: 8px;
+    height: 8px;
+  }
+
+  .t-card__name {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.25;
+    min-height: 33px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .t-card__economics {
+    gap: 4px;
+  }
+
+  .t-card__econ-label {
+    font-size: 8px;
+    letter-spacing: 0.06em;
+    margin-bottom: 1px;
+  }
+
+  .t-card__econ-value {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .t-card__meta {
+    gap: 3px;
+  }
+
+  .t-card__meta-row {
+    font-size: 10px;
+    line-height: 1.3;
+    color: var(--grey);
+  }
+
+  .t-card__meta-val {
+    font-size: 10px;
+  }
+
+  .t-card__capacity-bar {
+    height: 2.5px;
+    margin-top: 1px;
+  }
+
+  .t-card__cta {
+    padding-top: 8px;
+    border-top: 1px solid var(--cloud-soft);
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: 4px;
+  }
+
+  .t-card__status {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  .t-card__link {
+    font-size: 11px;
+    font-weight: 600;
   }
 
   /* Trust */
@@ -3155,14 +3265,59 @@ ul {
     display: none;
   }
 
-  /* Roles */
+  /* Roles — compact 2-column mobile grid */
   .roles__grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
   }
 
   .role-card {
-    padding: 28px 24px;
+    padding: 16px 12px 14px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 0;
+  }
+
+  .role-card__label {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    margin-bottom: 6px;
+  }
+
+  .role-card__tagline {
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 12px;
+  }
+
+  .role-card__features {
+    gap: 6px;
+    margin-bottom: 14px;
+    flex: 1;
+  }
+
+  .role-card__feature {
+    font-size: 11px;
+    line-height: 1.35;
+    gap: 6px;
+    align-items: flex-start;
+  }
+
+  .role-card__feature::before {
+    width: 4px;
+    height: 4px;
+    margin-top: 5px;
+  }
+
+  .role-card__cta {
+    font-size: 11.5px;
+    font-weight: 700;
+    padding-top: 8px;
+    border-top: 1px solid var(--cloud-soft);
+    margin-top: auto;
   }
 
   /* Organizer */
@@ -3175,10 +3330,48 @@ ul {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Results */
+  /* Results & Flexible Prize Engine — compact 2-column mobile layout */
   .results__layout {
     grid-template-columns: 1fr;
-    gap: 48px;
+    gap: 36px;
+  }
+
+  .prizes__grid {
+    gap: 16px;
+  }
+
+  .prizes__grid .h3 {
+    font-size: 18px;
+    margin-bottom: 14px !important;
+  }
+
+  .prize-cat__label {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
+  }
+
+  .prize-cat__items {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .prize-cat__item {
+    padding: 8px 10px;
+    font-size: 11.5px;
+    border-radius: var(--r-sm);
+    gap: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .prize-cat__item::before {
+    width: 4px;
+    height: 4px;
   }
 
   /* CTA */
@@ -3190,16 +3383,73 @@ ul {
     font-size: 16px;
   }
 
-  /* Footer */
+  /* Footer — compact 3-column mobile layout */
+  .footer {
+    padding: 40px 0 24px;
+  }
+
   .footer__upper {
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-bottom: 24px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, .06);
+  }
+
+  .footer__brand-name {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .footer__brand-desc {
+    max-width: 100%;
+    font-size: 12px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, .4);
+  }
+
+  .footer__nav-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .footer__col-title {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, .35);
+    margin-bottom: 10px;
+  }
+
+  .footer__links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .footer__link {
+    font-size: 12px;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, .55);
   }
 
   .footer__lower {
+    display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
     text-align: center;
+    align-items: center;
+  }
+
+  .footer__copyright {
+    font-size: 11px;
+  }
+
+  .footer__badge {
+    font-size: 10px;
   }
 }
 
@@ -3208,12 +3458,60 @@ ul {
     --side-margin: 16px;
   }
 
+  .tournament-grid {
+    gap: 8px;
+  }
+
+  .t-card__body {
+    padding: 8px 8px 10px;
+    gap: 6px;
+  }
+
+  .t-card__name {
+    font-size: 12px;
+    min-height: 30px;
+  }
+
+  .t-card__econ-value {
+    font-size: 13px;
+  }
+
   .career__stats-row {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .footer__upper {
-    grid-template-columns: 1fr;
-    gap: 24px;
+  .roles__grid {
+    gap: 8px;
+  }
+
+  .role-card {
+    padding: 12px 10px 12px;
+  }
+
+  .role-card__tagline {
+    font-size: 12.5px;
+    margin-bottom: 8px;
+  }
+
+  .role-card__feature {
+    font-size: 10px;
+  }
+
+  .prize-cat__items {
+    gap: 6px;
+  }
+
+  .prize-cat__item {
+    padding: 6px 8px;
+    font-size: 10.5px;
+  }
+
+  .footer__nav-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .footer__link {
+    font-size: 11px;
   }
 }
