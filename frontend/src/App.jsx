@@ -22,6 +22,8 @@ import {
   IoChatbubblesOutline,
 } from 'react-icons/io5'
 import './styles.css'
+import './player.css'
+import PlayerShell from './components/player/layout/PlayerShell'
 import {
   HERO_CONTENT,
   NAV_LINKS,
@@ -61,7 +63,7 @@ function useReveal(threshold = 0.15) {
 }
 
 // ─── Nav ─────────────────────────────────────────────────────────────────────
-function Nav() {
+function Nav({ onNavigateToPlayer }) {
   const [scrolled, setScrolled] = useState(false)
   const [pastHero, setPastHero] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -133,7 +135,39 @@ function Nav() {
 
             {/* Desktop actions */}
             <div className="nav__actions">
-              <a href="#" className="nav__sign-in">Sign in</a>
+              <button
+                type="button"
+                onClick={onNavigateToPlayer}
+                className="nav__sign-in"
+                style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+              >
+                Sign in
+              </button>
+              <button
+                type="button"
+                onClick={onNavigateToPlayer}
+                className="btn btn--secondary"
+                style={{
+                  height: '38px',
+                  padding: '0 14px',
+                  fontSize: '13px',
+                  display: 'inline-flex',
+                  gap: '6px',
+                  alignItems: 'center',
+                }}
+                title="Enter authenticated player experience"
+              >
+                <span
+                  style={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: '50%',
+                    background: '#22c55e',
+                    display: 'inline-block',
+                  }}
+                />
+                <span>Player Dashboard</span>
+              </button>
               <a href="#tournaments" className="btn btn--primary">Explore Tournaments</a>
             </div>
 
@@ -156,7 +190,17 @@ function Nav() {
           <a key={l.label} href={l.href} className="nav__drawer-link" onClick={() => setMenuOpen(false)}>{l.label}</a>
         ))}
         <div className="nav__drawer-actions">
-          <a href="#" className="btn btn--secondary" style={{ justifyContent: 'center' }}>Sign in</a>
+          <button
+            type="button"
+            className="btn btn--secondary"
+            style={{ justifyContent: 'center', width: '100%' }}
+            onClick={() => {
+              setMenuOpen(false)
+              if (onNavigateToPlayer) onNavigateToPlayer()
+            }}
+          >
+            Player Dashboard (Sign in)
+          </button>
           <a href="#tournaments" className="btn btn--primary" style={{ justifyContent: 'center' }} onClick={() => setMenuOpen(false)}>Explore Tournaments</a>
         </div>
       </div>
@@ -702,7 +746,7 @@ function LeaderboardSection() {
 }
 
 // ─── Roles Section ────────────────────────────────────────────────────────────
-function RolesSection() {
+function RolesSection({ onNavigateToPlayer }) {
   const [ref, visible] = useReveal()
 
   return (
@@ -730,9 +774,29 @@ function RolesSection() {
                   <li key={f} className="role-card__feature">{f}</li>
                 ))}
               </ul>
-              <a href="#" className="role-card__cta">
-                {role.cta} <span aria-hidden="true">→</span>
-              </a>
+              {role.id === 'player' ? (
+                <button
+                  type="button"
+                  onClick={onNavigateToPlayer}
+                  className="role-card__cta"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: 0,
+                    font: 'inherit',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                  }}
+                >
+                  {role.cta} <span aria-hidden="true">→</span>
+                </button>
+              ) : (
+                <a href="#" className="role-card__cta">
+                  {role.cta} <span aria-hidden="true">→</span>
+                </a>
+              )}
             </div>
           ))}
         </div>
@@ -964,9 +1028,35 @@ function Footer() {
 
 // ─── App ──────────────────────────────────────────────────────────────────────
 export default function App() {
+  const [routePath, setRoutePath] = useState(window.location.pathname)
+
+  useEffect(() => {
+    const onPopState = () => {
+      setRoutePath(window.location.pathname)
+    }
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
+  }, [])
+
+  const navigateTo = (path) => {
+    window.history.pushState(null, '', path)
+    setRoutePath(path)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  // Render dedicated Player Dashboard when on /player or sub-routes
+  if (routePath.startsWith('/player')) {
+    return (
+      <PlayerShell
+        currentPath={routePath}
+        onSignOut={() => navigateTo('/')}
+      />
+    )
+  }
+
   return (
     <>
-      <Nav />
+      <Nav onNavigateToPlayer={() => navigateTo('/player')} />
       <main id="main-content">
         <ScrollHero content={HERO_CONTENT} />
         <ProblemSection />
@@ -975,7 +1065,7 @@ export default function App() {
         <TrustSection />
         <CareerSection />
         <LeaderboardSection />
-        <RolesSection />
+        <RolesSection onNavigateToPlayer={() => navigateTo('/player')} />
         <OrganizerSection />
         <ResultsSection />
         <CTASection />
